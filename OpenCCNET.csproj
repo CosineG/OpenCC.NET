@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Dictionary\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="jieba.NET" Version="0.42.2" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /e /y /i &quot;$(SolutionDir)Dictionary&quot; &quot;$(ProjectDir)$(OutDir)Dictionary&quot;&#xD;&#xA;xcopy /e /y /i &quot;$(SolutionDir)JiebaResource&quot; &quot;$(ProjectDir)$(OutDir)JiebaResource&quot;" />
+  </Target>
+
+</Project>
