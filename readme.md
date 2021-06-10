@@ -53,9 +53,9 @@ Console.WriteLine(ZhConverter.HansToHK(input));
 |ToHKFromHans()|简体中文=>繁体中文（香港）||
 |ToHansFromHant()|繁体中文=>简体中文||
 |ToTWFromHant(bool=false)|繁体中文=>繁体中文（台湾）|bool参数决定是否转换为台湾地区常用词汇|
-|ToHKFromHant(string)|繁体中文=>繁体中文（香港）||
+|ToHKFromHant()|繁体中文=>繁体中文（香港）||
 |ToHansFromTW(bool=false)|繁体中文（台湾）=>简体中文|bool参数决定是否转换为大陆地区常用词汇|
-|ToHansFromHK(string)|繁体中文（香港）=>简体中文||
+|ToHansFromHK()|繁体中文（香港）=>简体中文||
 
 ```csharp
 var input = "為我的電腦換了記憶體，開啟電腦后感覺網路速度更快了";
