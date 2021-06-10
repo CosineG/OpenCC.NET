@@ -34,7 +34,7 @@ OpenCC.NET提供了两种风格的API。
 |TWToHans(string, bool=false)|繁体中文（台湾）=>简体中文|bool参数决定是否转换为大陆地区常用词汇|
 |HKToHans(string)|繁体中文（香港）=>简体中文||
 
-```
+```csharp
 var input = "为我的电脑换了内存，开启电脑后感觉网络速度更快了";
 // 爲我的電腦換了內存，開啓電腦後感覺網絡速度更快了
 Console.WriteLine(ZhConverter.HansToHant(input));
@@ -57,7 +57,7 @@ Console.WriteLine(ZhConverter.HansToHK(input));
 |ToHansFromTW(bool=false)|繁体中文（台湾）=>简体中文|bool参数决定是否转换为大陆地区常用词汇|
 |ToHansFromHK(string)|繁体中文（香港）=>简体中文||
 
-```
+```csharp
 var input = "為我的電腦換了記憶體，開啟電腦后感覺網路速度更快了";
 // 爲我的電腦換了內存，開啓電腦后感覺網絡速度更快了
 Console.WriteLine(input.ToHantFromTW(true));
@@ -72,13 +72,13 @@ Console.WriteLine(input.ToHansFromTW(true));
 #### 分词
 
 OpenCC.NET默认使用jieba.NET实现分词，因此第一次调用API时需要加载所需文件，可能会花费少许时间。项目中使用了静态的JiebaSegmenter
-```
+```csharp
 public static JiebaSegmenter Jieba = new JiebaSegmenter();
 ```
 因此可以通过`ZhUtil.Jieba`进行自定义设置，详情请见[jieba.NET](https://github.com/anderscui/jieba.NET)。
 
 同时OpenCC.NET支持自定义分词实现：
-```
+```csharp
 ZhUtil.Segment = input =>
 {
     // 输入为string，输出为IEnumerable<string>
