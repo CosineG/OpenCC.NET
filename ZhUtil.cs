@@ -37,6 +37,7 @@ namespace OpenCCNET
         public static void ResetSegment()
         {
             Segment = SegmentByJieba;
+            Jieba = new JiebaSegmenter();
         }
     }
 }
