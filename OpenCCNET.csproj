@@ -4,11 +4,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>CosineG</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0</Version>
-    <FileVersion>0.1.0.0</FileVersion>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <Product>OpenCC.NET</Product>
+    <Title>OpenCC.NET</Title>
+    <Version>0.1.1</Version>
+    <FileVersion>0.1.1.0</FileVersion>
+    <AssemblyVersion>0.1.1.0</AssemblyVersion>
     <PackageProjectUrl>https://github.com/CosineG/OpenCC.NET</PackageProjectUrl>
+    <Description>The .Net version of OpenCC(Open Chinese Convert), for the conversion between Simplified Chinese and Traditional Chinese.</Description>
+    <PackageId>OpenCCNET</PackageId>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
 
@@ -19,6 +23,13 @@
 
   <ItemGroup>
     <PackageReference Include="jieba.NET" Version="0.42.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

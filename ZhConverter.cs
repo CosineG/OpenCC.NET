@@ -198,7 +198,7 @@ namespace OpenCCNET
         /// </summary>
         public static string ToHansFromHant(this string text)
         {
-            return HansToHant(text);
+            return HantToHans(text);
         }
 
         /// <summary>
