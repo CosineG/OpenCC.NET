@@ -2,10 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <Authors>CosineG</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
+    <FileVersion>0.1.0.0</FileVersion>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <Product>OpenCC.NET</Product>
+    <PackageProjectUrl>https://github.com/CosineG/OpenCC.NET</PackageProjectUrl>
   </PropertyGroup>
 
+
+  
   <ItemGroup>
     <Folder Include="Dictionary\" />
   </ItemGroup>
