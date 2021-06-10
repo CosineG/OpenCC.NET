@@ -25,15 +25,15 @@ namespace OpenCCNET
                 else
                 {
                     // 逐字转换
-                    foreach (var character in phrase)
+                    foreach (var character in phrase.Select(c => c.ToString()))
                     {
-                        if (ZhDictionary.STCharacters.ContainsKey(character.ToString()))
+                        if (ZhDictionary.STCharacters.ContainsKey(character))
                         {
-                            textBuilder.Append(ZhDictionary.STCharacters[character.ToString()]);
+                            textBuilder.Append(ZhDictionary.STCharacters[character]);
                         }
                         else
                         {
-                            textBuilder.Append(character.ToString());
+                            textBuilder.Append(character);
                         }
                     }
                 }
@@ -69,15 +69,15 @@ namespace OpenCCNET
                 }
                 else
                 {
-                    foreach (var character in phrase)
+                    foreach (var character in phrase.Select(c => c.ToString()))
                     {
-                        if (ZhDictionary.STCharacters.ContainsKey(character.ToString()))
+                        if (ZhDictionary.STCharacters.ContainsKey(character))
                         {
-                            phraseBuilder.Append(ZhDictionary.STCharacters[character.ToString()]);
+                            phraseBuilder.Append(ZhDictionary.STCharacters[character]);
                         }
                         else
                         {
-                            phraseBuilder.Append(character.ToString());
+                            phraseBuilder.Append(character);
                         }
                     }
 
@@ -129,15 +129,15 @@ namespace OpenCCNET
                 }
                 else
                 {
-                    foreach (var character in phrase)
+                    foreach (var character in phrase.Select(c => c.ToString()))
                     {
-                        if (ZhDictionary.STCharacters.ContainsKey(character.ToString()))
+                        if (ZhDictionary.STCharacters.ContainsKey(character))
                         {
-                            textBuilder.Append(ZhDictionary.STCharacters[character.ToString()]);
+                            textBuilder.Append(ZhDictionary.STCharacters[character]);
                         }
                         else
                         {
-                            textBuilder.Append(character.ToString());
+                            textBuilder.Append(character);
                         }
                     }
                 }
@@ -164,7 +164,33 @@ namespace OpenCCNET
         /// </summary>
         public static string HantToHans(string text)
         {
-            return text;
+            var phrases = ZhUtil.Segment(text);
+            var textBuilder = new StringBuilder(text.Length * 2);
+            foreach (var phrase in phrases)
+            {
+                // 整词转换
+                if (ZhDictionary.TSPhrases.ContainsKey(phrase))
+                {
+                    textBuilder.Append(ZhDictionary.TSPhrases[phrase]);
+                }
+                else
+                {
+                    // 逐字转换
+                    foreach (var character in phrase.Select(c => c.ToString()))
+                    {
+                        if (ZhDictionary.TSCharacters.ContainsKey(character))
+                        {
+                            textBuilder.Append(ZhDictionary.TSCharacters[character]);
+                        }
+                        else
+                        {
+                            textBuilder.Append(character);
+                        }
+                    }
+                }
+            }
+
+            return textBuilder.ToString();
         }
 
         /// <summary>
@@ -181,7 +207,31 @@ namespace OpenCCNET
         /// <param name="replacePhrases">是否转换地区词汇</param>
         public static string HantToTW(string text, bool replacePhrases = false)
         {
-            return text;
+            var phrases = ZhUtil.Segment(text);
+            var textBuilder = new StringBuilder(text.Length * 2);
+            // 转换地区词汇
+            if (replacePhrases)
+            {
+                foreach (var phrase in phrases)
+                {
+                    if (ZhDictionary.TWPhrases.ContainsKey(phrase))
+                    {
+                        textBuilder.Append(ZhDictionary.TWPhrases[phrase]);
+                    }
+                    else
+                    {
+                        textBuilder.Append(phrase);
+                    }
+                }
+            }
+
+            // 转换为台湾字形
+            foreach (var variant in ZhDictionary.TWVariants.Keys)
+            {
+                textBuilder.Replace(variant, ZhDictionary.TWVariants[variant]);
+            }
+
+            return textBuilder.ToString();
         }
 
         /// <summary>
@@ -198,7 +248,13 @@ namespace OpenCCNET
         /// </summary>
         public static string HantToHK(string text)
         {
-            return text;
+            var textBuilder = new StringBuilder(text, text.Length * 2);
+            foreach (var variant in ZhDictionary.HKVariants.Keys)
+            {
+                textBuilder.Replace(variant, ZhDictionary.HKVariants[variant]);
+            }
+
+            return textBuilder.ToString();
         }
 
         /// <summary>
@@ -215,6 +271,37 @@ namespace OpenCCNET
         /// <param name="replacePhrases">是否转换地区词汇</param>
         public static string TWToHant(string text, bool replacePhrases = false)
         {
+            var textBuilder = new StringBuilder(text, text.Length * 2);
+
+            // 字形转回OpenCC标准
+            foreach (var variant in ZhDictionary.TWVariantsReversed.Keys)
+            {
+                textBuilder.Replace(variant, ZhDictionary.TWVariantsReversed[variant]);
+            }
+
+            text = textBuilder.ToString();
+            textBuilder.Clear();
+
+            // 转换地区词汇
+            if (replacePhrases)
+            {
+                var phrases = ZhUtil.Segment(text);
+
+                foreach (var phrase in phrases)
+                {
+                    if (ZhDictionary.TWPhrasesReversed.ContainsKey(phrase))
+                    {
+                        textBuilder.Append(ZhDictionary.TWPhrasesReversed[phrase]);
+                    }
+                    else
+                    {
+                        textBuilder.Append(phrase);
+                    }
+                }
+
+                return textBuilder.ToString();
+            }
+
             return text;
         }
 
@@ -233,7 +320,57 @@ namespace OpenCCNET
         /// <param name="replacePhrases">是否转换地区词汇</param>
         public static string TWToHans(string text, bool replacePhrases = false)
         {
-            return text;
+            var textBuilder = new StringBuilder(text, text.Length * 2);
+
+            // 字形转回OpenCC标准
+            foreach (var variant in ZhDictionary.TWVariantsReversed.Keys)
+            {
+                textBuilder.Replace(variant, ZhDictionary.TWVariantsReversed[variant]);
+            }
+
+            text = textBuilder.ToString();
+            textBuilder.Clear();
+
+            var phrases = ZhUtil.Segment(text);
+            var phraseBuilder = new StringBuilder(10);
+            foreach (var phrase in phrases)
+            {
+                // 转换地区词汇
+                string hantPhrase;
+                if (replacePhrases && ZhDictionary.TWPhrasesReversed.ContainsKey(phrase))
+                {
+                    hantPhrase = ZhDictionary.TWPhrasesReversed[phrase];
+                }
+                else
+                {
+                    hantPhrase = phrase;
+                }
+
+                // 转换至简体
+                if (ZhDictionary.TSPhrases.ContainsKey(hantPhrase))
+                {
+                    textBuilder.Append(ZhDictionary.TSPhrases[hantPhrase]);
+                }
+                else
+                {
+                    foreach (var character in hantPhrase.Select(c => c.ToString()))
+                    {
+                        if (ZhDictionary.TSCharacters.ContainsKey(character))
+                        {
+                            phraseBuilder.Append(ZhDictionary.TSCharacters[character]);
+                        }
+                        else
+                        {
+                            phraseBuilder.Append(character);
+                        }
+                    }
+
+                    textBuilder.Append(phraseBuilder.ToString());
+                    phraseBuilder.Clear();
+                }
+            }
+
+            return textBuilder.ToString();
         }
 
         /// <summary>
@@ -250,7 +387,13 @@ namespace OpenCCNET
         /// </summary>
         public static string HKToHant(string text)
         {
-            return text;
+            var textBuilder = new StringBuilder(text, text.Length * 2);
+            foreach (var variant in ZhDictionary.HKVariantsReversed.Keys)
+            {
+                textBuilder.Replace(variant, ZhDictionary.HKVariantsReversed[variant]);
+            }
+
+            return textBuilder.ToString();
         }
 
         /// <summary>
@@ -266,7 +409,45 @@ namespace OpenCCNET
         /// </summary>
         public static string HKToHans(string text)
         {
-            return text;
+            var textBuilder = new StringBuilder(text, text.Length * 2);
+            // 字形转回OpenCC标准
+            foreach (var variant in ZhDictionary.HKVariantsReversed.Keys)
+            {
+                textBuilder.Replace(variant, ZhDictionary.HKVariantsReversed[variant]);
+            }
+
+            text = textBuilder.ToString();
+            textBuilder.Clear();
+
+            // 转换至简体
+            var phrases = ZhUtil.Segment(text);
+            var phraseBuilder = new StringBuilder(10);
+            foreach (var phrase in phrases)
+            {
+                if (ZhDictionary.TSPhrases.ContainsKey(phrase))
+                {
+                    textBuilder.Append(ZhDictionary.TSPhrases[phrase]);
+                }
+                else
+                {
+                    foreach (var character in phrase.Select(c => c.ToString()))
+                    {
+                        if (ZhDictionary.TSCharacters.ContainsKey(character))
+                        {
+                            phraseBuilder.Append(ZhDictionary.TSCharacters[character]);
+                        }
+                        else
+                        {
+                            phraseBuilder.Append(character);
+                        }
+                    }
+
+                    textBuilder.Append(phraseBuilder.ToString());
+                    phraseBuilder.Clear();
+                }
+            }
+
+            return textBuilder.ToString();
         }
 
         /// <summary>
