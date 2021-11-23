@@ -208,10 +208,11 @@ namespace OpenCCNET
         public static string HantToTW(string text, bool replacePhrases = false)
         {
             var phrases = ZhUtil.Segment(text);
-            var textBuilder = new StringBuilder(text.Length * 2);
+            StringBuilder textBuilder;
             // 转换地区词汇
             if (replacePhrases)
             {
+                textBuilder = new StringBuilder(text.Length * 2);
                 foreach (var phrase in phrases)
                 {
                     if (ZhDictionary.TWPhrases.ContainsKey(phrase))
@@ -223,6 +224,10 @@ namespace OpenCCNET
                         textBuilder.Append(phrase);
                     }
                 }
+            }
+            else
+            {
+                textBuilder = new StringBuilder(text);
             }
 
             // 转换为台湾字形
@@ -240,7 +245,7 @@ namespace OpenCCNET
         /// <param name="replacePhrases">是否转换地区词汇</param>
         public static string ToTWFromHant(this string text, bool replacePhrases = false)
         {
-            return HantToTW(text);
+            return HantToTW(text, replacePhrases);
         }
 
         /// <summary>
@@ -248,7 +253,7 @@ namespace OpenCCNET
         /// </summary>
         public static string HantToHK(string text)
         {
-            var textBuilder = new StringBuilder(text, text.Length * 2);
+            var textBuilder = new StringBuilder(text);
             foreach (var variant in ZhDictionary.HKVariants.Keys)
             {
                 textBuilder.Replace(variant, ZhDictionary.HKVariants[variant]);
