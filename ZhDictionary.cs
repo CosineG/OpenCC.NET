@@ -64,6 +64,16 @@ namespace OpenCCNET.Dictionary
         /// </summary>
         public static Dictionary<string, string> HKVariantsReversed = LoadDictionary(@"HKVariants", true);
 
+        /// <summary>
+        /// 繁体中文（OpenCC标准）=>繁体中文（中国大陆）单字转换字典
+        /// </summary>
+        public static Dictionary<string, string> CNVariants = LoadDictionary(@"CNVariants");
+
+        /// <summary>
+        /// 繁体中文（中国大陆）=>繁体中文（OpenCC标准）单字转换字典
+        /// </summary>
+        public static Dictionary<string, string> CNVariantsReversed = LoadDictionary(@"CNVariants", true);
+
 
         /// <summary>
         /// 加载单个字典文件

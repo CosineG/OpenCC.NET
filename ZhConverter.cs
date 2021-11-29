@@ -160,6 +160,52 @@ namespace OpenCCNET
         }
 
         /// <summary>
+        /// 简体中文=>繁体中文（中国大陆）
+        /// </summary>
+        public static string HansToCN(string text)
+        {
+            var phrases = ZhUtil.Segment(text);
+            var textBuilder = new StringBuilder(text.Length * 2);
+            foreach (var phrase in phrases)
+            {
+                if (ZhDictionary.STPhrases.ContainsKey(phrase))
+                {
+                    textBuilder.Append(ZhDictionary.STPhrases[phrase]);
+                }
+                else
+                {
+                    foreach (var character in phrase.Select(c => c.ToString()))
+                    {
+                        if (ZhDictionary.STCharacters.ContainsKey(character))
+                        {
+                            textBuilder.Append(ZhDictionary.STCharacters[character]);
+                        }
+                        else
+                        {
+                            textBuilder.Append(character);
+                        }
+                    }
+                }
+            }
+
+            foreach (var variant in ZhDictionary.CNVariants.Keys)
+            {
+                textBuilder.Replace(variant, ZhDictionary.CNVariants[variant]);
+            }
+
+            return textBuilder.ToString();
+        }
+
+        /// <summary>
+        /// 简体中文=>繁体中文（中国大陆）
+        /// </summary>
+        public static string ToCNFromHans(this string text)
+        {
+            return HansToCN(text);
+        }
+
+
+        /// <summary>
         /// 繁体中文（OpenCC标准）=>简体中文
         /// </summary>
         public static string HantToHans(string text)
@@ -268,6 +314,28 @@ namespace OpenCCNET
         public static string ToHKFromHant(this string text)
         {
             return HantToHK(text);
+        }
+
+        /// <summary>
+        /// 繁体中文（OpenCC标准）=>繁体中文（中国大陆）
+        /// </summary>
+        public static string HantToCN(string text)
+        {
+            var textBuilder = new StringBuilder(text);
+            foreach (var variant in ZhDictionary.CNVariants.Keys)
+            {
+                textBuilder.Replace(variant, ZhDictionary.CNVariants[variant]);
+            }
+
+            return textBuilder.ToString();
+        }
+
+        /// <summary>
+        /// 繁体中文（OpenCC标准）=>繁体中文（中国大陆）
+        /// </summary>
+        public static string ToCNFromHant(this string text)
+        {
+            return HantToCN(text);
         }
 
         /// <summary>
@@ -461,6 +529,83 @@ namespace OpenCCNET
         public static string ToHansFromHK(this string text)
         {
             return HKToHans(text);
+        }
+
+
+        /// <summary>
+        /// 繁体中文（中国大陆）=>繁体中文（OpenCC标准）
+        /// </summary>
+        public static string CNToHant(string text)
+        {
+            var textBuilder = new StringBuilder(text, text.Length * 2);
+            foreach (var variant in ZhDictionary.CNVariantsReversed.Keys)
+            {
+                textBuilder.Replace(variant, ZhDictionary.CNVariantsReversed[variant]);
+            }
+
+            return textBuilder.ToString();
+        }
+
+        /// <summary>
+        /// 繁体中文（中国大陆）=>繁体中文（OpenCC标准）
+        /// </summary>
+        public static string ToHantFromCN(this string text)
+        {
+            return CNToHant(text);
+        }
+
+        /// <summary>
+        /// 繁体中文（中国大陆）=>简体中文
+        /// </summary>
+        public static string CNToHans(string text)
+        {
+            var textBuilder = new StringBuilder(text, text.Length * 2);
+            // 字形转回OpenCC标准
+            foreach (var variant in ZhDictionary.CNVariantsReversed.Keys)
+            {
+                textBuilder.Replace(variant, ZhDictionary.CNVariantsReversed[variant]);
+            }
+
+            text = textBuilder.ToString();
+            textBuilder.Clear();
+
+            // 转换至简体
+            var phrases = ZhUtil.Segment(text);
+            var phraseBuilder = new StringBuilder(10);
+            foreach (var phrase in phrases)
+            {
+                if (ZhDictionary.TSPhrases.ContainsKey(phrase))
+                {
+                    textBuilder.Append(ZhDictionary.TSPhrases[phrase]);
+                }
+                else
+                {
+                    foreach (var character in phrase.Select(c => c.ToString()))
+                    {
+                        if (ZhDictionary.TSCharacters.ContainsKey(character))
+                        {
+                            phraseBuilder.Append(ZhDictionary.TSCharacters[character]);
+                        }
+                        else
+                        {
+                            phraseBuilder.Append(character);
+                        }
+                    }
+
+                    textBuilder.Append(phraseBuilder.ToString());
+                    phraseBuilder.Clear();
+                }
+            }
+
+            return textBuilder.ToString();
+        }
+
+        /// <summary>
+        /// 繁体中文（中国大陆）=>简体中文
+        /// </summary>
+        public static string ToHansFromCN(this string text)
+        {
+            return CNToHans(text);
         }
     }
 }
