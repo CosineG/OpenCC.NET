@@ -1,7 +1,6 @@
+using JiebaNet.Segmenter;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using JiebaNet.Segmenter;
 
 namespace OpenCCNET
 {
@@ -16,9 +15,11 @@ namespace OpenCCNET
         /// </summary>
         public static JiebaSegmenter Jieba = new JiebaSegmenter();
 
-        static ZhUtil()
+        public static void Initialize()
         {
             ConfigManager.ConfigFileBaseDir = @".\JiebaResource";
+            ZhConverter.Initialize();
+            ZhDictionary.Initialize();
         }
 
         /// <summary>
