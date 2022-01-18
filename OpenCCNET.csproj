@@ -5,7 +5,7 @@
     <Authors>CosineG</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>OpenCC.NET</Title>
-    <Version>0.2.0</Version>
+    <Version>0.2.2</Version>
     <PackageProjectUrl>https://github.com/CosineG/OpenCC.NET</PackageProjectUrl>
     <Description>The .Net version of OpenCC(Open Chinese Convert), for the conversion between Simplified Chinese and Traditional Chinese.</Description>
     <PackageId>OpenCCNET</PackageId>
@@ -18,7 +18,7 @@
     <Content Include="Dictionary\*.txt">
       <Pack>true</Pack>
       <PackagePath>Dictionary\</PackagePath>
-      <CopyToOutputDirectory>true</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content> 
   </ItemGroup>
 
@@ -26,7 +26,7 @@
     <Content Include="JiebaResource\*.*">
       <Pack>true</Pack>
       <PackagePath>JiebaResource\</PackagePath>
-      <CopyToOutputDirectory>true</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
@@ -41,7 +41,7 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /e /y /i &quot;$(SolutionDir)Dictionary&quot; &quot;$(ProjectDir)$(OutDir)Dictionary&quot;&#xD;&#xA;xcopy /e /y /i &quot;$(SolutionDir)JiebaResource&quot; &quot;$(ProjectDir)$(OutDir)JiebaResource&quot;" />
   </Target>
 

@@ -87,7 +87,7 @@ namespace OpenCCNET
                 string line;
                 while ((line = sr.ReadLine()) != null)
                 {
-                    var items = line.Split((char[]) null, StringSplitOptions.RemoveEmptyEntries);
+                    var items = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
                     if (!reverse)
                     {
                         if (dictionary.ContainsKey(items[0])) continue;
@@ -124,7 +124,7 @@ namespace OpenCCNET
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
-                        var items = line.Split((char[]) null, StringSplitOptions.RemoveEmptyEntries);
+                        var items = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
                         if (!reverse)
                         {
                             if (dictionary.ContainsKey(items[0])) continue;
@@ -145,17 +145,17 @@ namespace OpenCCNET
             return dictionary;
         }
 
-        public static void Initialize()
+        public static void Initialize(string dictionaryDirectory = "Dictionary")
         {
-            _dictionaryDirectory = @".\Dictionary";
+            _dictionaryDirectory = dictionaryDirectory;
             STCharacters = LoadDictionary(@"STCharacters");
             STPhrases = LoadDictionary(@"STPhrases");
             TSCharacters = LoadDictionary(@"TSCharacters");
             TSPhrases = LoadDictionary(@"TSPhrases");
             TWVariants = LoadDictionary(@"TWVariants");
-            TWPhrases = LoadDictionary(new[] {@"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther"});
+            TWPhrases = LoadDictionary(new[] { @"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther" });
             TWVariantsReversed = LoadDictionary(@"TWVariants", true);
-            TWPhrasesReversed = LoadDictionary(new[] {@"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther"}, true);
+            TWPhrasesReversed = LoadDictionary(new[] { @"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther" }, true);
             HKVariants = LoadDictionary(@"HKVariants");
             HKVariantsReversed = LoadDictionary(@"HKVariants", true);
             CNVariants = LoadDictionary(@"CNVariants");
