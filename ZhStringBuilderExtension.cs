@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OpenCCNET
 {
@@ -57,13 +58,13 @@ namespace OpenCCNET
             Dictionary<string, string> targetIdiom, bool isIdiomConvert)
         {
             textBuilder.Clear();
-            var phraseBuilder = new StringBuilder(10);
+            var phraseBuilder = new StringBuilder();
             foreach (var phrase in phrases)
             {
-                string hantPhrase;
+                string convertedPhrase;
                 if (targetPhrases.ContainsKey(phrase))
                 {
-                    hantPhrase = targetPhrases[phrase];
+                    convertedPhrase = targetPhrases[phrase];
                 }
                 else
                 {
@@ -79,18 +80,18 @@ namespace OpenCCNET
                         }
                     }
 
-                    hantPhrase = phraseBuilder.ToString();
+                    convertedPhrase = phraseBuilder.ToString();
                     phraseBuilder.Clear();
                 }
 
                 // 转换为地区常用词汇
-                if (isIdiomConvert && targetIdiom.ContainsKey(hantPhrase))
+                if (isIdiomConvert && targetIdiom.ContainsKey(convertedPhrase))
                 {
-                    textBuilder.Append(targetIdiom[hantPhrase]);
+                    textBuilder.Append(targetIdiom[convertedPhrase]);
                 }
                 else
                 {
-                    textBuilder.Append(hantPhrase);
+                    textBuilder.Append(convertedPhrase);
                 }
             }
         }
@@ -110,26 +111,26 @@ namespace OpenCCNET
             Dictionary<string, string> targetIdiom, bool isIdiomConvert)
         {
             textBuilder.Clear();
-            var phraseBuilder = new StringBuilder(10);
+            var phraseBuilder = new StringBuilder();
             foreach (var phrase in phrases)
             {
-                string hantPhrase;
+                string convertedPhrase;
                 if (isIdiomConvert && targetIdiom.ContainsKey(phrase))
                 {
-                    hantPhrase = targetIdiom[phrase];
+                    convertedPhrase = targetIdiom[phrase];
                 }
                 else
                 {
-                    hantPhrase = phrase;
+                    convertedPhrase = phrase;
                 }
                 
-                if (targetPhrases.ContainsKey(hantPhrase))
+                if (targetPhrases.ContainsKey(convertedPhrase))
                 {
-                    textBuilder.Append(targetPhrases[hantPhrase]);
+                    textBuilder.Append(targetPhrases[convertedPhrase]);
                 }
                 else
                 {
-                    foreach (var character in hantPhrase.Select(c => c.ToString()))
+                    foreach (var character in convertedPhrase.Select(c => c.ToString()))
                     {
                         if (targetCharacters.ContainsKey(character))
                         {

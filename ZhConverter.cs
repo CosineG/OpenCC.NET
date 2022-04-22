@@ -1,16 +1,29 @@
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OpenCCNET
 {
     public static partial class ZhConverter
     {
+        public static void Initialize(string dictionaryDirectory = "Dictionary", string jiebaResourceDirectory = "JiebaResource")
+        {
+            ZhSegment.Initialize(jiebaResourceDirectory);
+            ZhDictionary.Initialize(dictionaryDirectory);
+        }
+
+        public static async Task InitializeAsync(string dictionaryDirectory = "Dictionary", string jiebaResourceDirectory = "JiebaResource")
+        {
+            ZhSegment.Initialize(jiebaResourceDirectory);
+            await ZhDictionary.InitializeAsync(dictionaryDirectory);
+        }
+
         /// <summary>
         /// 简体中文=>繁体中文（OpenCC标准）
         /// </summary>
         public static string HansToHant(string text)
         {
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             var textBuilder = new StringBuilder(text.Length * 2);
             // 转换词汇(包含单字)
             textBuilder.ConvertPhrase(phrases, ZhDictionary.STCharacters, ZhDictionary.STPhrases);
@@ -32,7 +45,7 @@ namespace OpenCCNET
         /// <param name="isIdiomConvert">是否转换地区词汇</param>
         public static string HansToTW(string text, bool isIdiomConvert = false)
         {
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             var textBuilder = new StringBuilder(text.Length * 2);
             // 转换词汇(常用词替换可选)
             textBuilder.ConvertPhraseAndIdiom(phrases, ZhDictionary.STCharacters,
@@ -57,7 +70,7 @@ namespace OpenCCNET
         /// </summary>
         public static string HansToHK(string text)
         {
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             var textBuilder = new StringBuilder(text.Length * 2);
             textBuilder.ConvertPhrase(phrases, ZhDictionary.STCharacters, ZhDictionary.STPhrases);
             textBuilder.ConvertVariant(ZhDictionary.HKVariants);
@@ -77,7 +90,7 @@ namespace OpenCCNET
         /// </summary>
         public static string HansToCN(string text)
         {
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             var textBuilder = new StringBuilder(text.Length * 2);
             textBuilder.ConvertPhrase(phrases, ZhDictionary.STCharacters, ZhDictionary.STPhrases);
             textBuilder.ConvertVariant(ZhDictionary.CNVariants);
@@ -98,7 +111,7 @@ namespace OpenCCNET
         /// </summary>
         public static string HantToHans(string text)
         {
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             var textBuilder = new StringBuilder(text.Length * 2);
             textBuilder.ConvertPhrase(phrases, ZhDictionary.TSCharacters, ZhDictionary.TSPhrases);
             return textBuilder.ToString();
@@ -118,7 +131,7 @@ namespace OpenCCNET
         /// <param name="isIdiomConvert">是否转换地区词汇</param>
         public static string HantToTW(string text, bool isIdiomConvert = false)
         {
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             StringBuilder textBuilder = new StringBuilder(text.Length * 2);
             textBuilder.ConvertIdiom(phrases, ZhDictionary.TWPhrases, isIdiomConvert);
             textBuilder.ConvertVariant(ZhDictionary.TWVariants);
@@ -159,7 +172,7 @@ namespace OpenCCNET
         /// <param name="isIdiomConvert">是否转换地区词汇</param>
         public static string HantToCN(string text, bool isIdiomConvert = false)
         {
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             StringBuilder textBuilder = new StringBuilder(text.Length * 2);
             textBuilder.ConvertIdiom(phrases, ZhDictionary.TWPhrases, isIdiomConvert);
             textBuilder.ConvertVariant(ZhDictionary.CNVariants);
@@ -184,7 +197,7 @@ namespace OpenCCNET
             // 字形转回OpenCC标准
             textBuilder.ConvertVariant(ZhDictionary.TWVariantsReversed);
             text = textBuilder.ToString();
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             textBuilder.ConvertIdiom(phrases, ZhDictionary.TWPhrases, isIdiomConvert);
             return text;
         }
@@ -207,7 +220,7 @@ namespace OpenCCNET
             var textBuilder = new StringBuilder(text, text.Length * 2);
             textBuilder.ConvertVariant(ZhDictionary.TWVariantsReversed);
             text = textBuilder.ToString();
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             // 先替换常用词，再转换
             textBuilder.ConvertPhraseAndIdiomReverse(phrases, ZhDictionary.TSCharacters, ZhDictionary.TSPhrases,
                 ZhDictionary.TWPhrasesReversed, isIdiomConvert);
@@ -249,7 +262,7 @@ namespace OpenCCNET
             var textBuilder = new StringBuilder(text, text.Length * 2);
             textBuilder.ConvertVariant(ZhDictionary.HKVariantsReversed);
             text = textBuilder.ToString();
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             textBuilder.ConvertPhrase(phrases, ZhDictionary.TSCharacters, ZhDictionary.TSPhrases);
 
             return textBuilder.ToString();
@@ -290,7 +303,7 @@ namespace OpenCCNET
             var textBuilder = new StringBuilder(text, text.Length * 2);
             textBuilder.ConvertVariant(ZhDictionary.CNVariantsReversed);
             text = textBuilder.ToString();
-            var phrases = ZhUtil.Segment(text);
+            var phrases = ZhSegment.Segment(text);
             textBuilder.ConvertPhrase(phrases, ZhDictionary.TSCharacters, ZhDictionary.TSPhrases);
             return textBuilder.ToString();
         }
@@ -302,10 +315,6 @@ namespace OpenCCNET
         {
             return CNToHans(text);
         }
-
-        public static void Initialize()
-        {
-            HansToHant("");
-        }
+        
     }
 }
