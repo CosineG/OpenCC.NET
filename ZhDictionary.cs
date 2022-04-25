@@ -18,62 +18,83 @@ namespace OpenCCNET
             /// <summary>
             /// 简体中文=>繁体中文（OpenCC标准）单字转换字典
             /// </summary>
-            public static Dictionary<string, string> STCharacters;
+            public static IDictionary<string, string> STCharacters { get; set; }
 
             /// <summary>
             /// 简体中文=>繁体中文（OpenCC标准）词汇转换字典
             /// </summary>
-            public static Dictionary<string, string> STPhrases;
+            public static IDictionary<string, string> STPhrases { get; set; }
 
             /// <summary>
             /// 繁体中文（OpenCC标准）=>简体中文单字转换字典
             /// </summary>
-            public static Dictionary<string, string> TSCharacters;
+            public static IDictionary<string, string> TSCharacters { get; set; }
 
             /// <summary>
             /// 繁体中文（OpenCC标准）=>简体中文词汇转换字典
             /// </summary>
-            public static Dictionary<string, string> TSPhrases;
+            public static IDictionary<string, string> TSPhrases { get; set; }
 
             /// <summary>
             /// 繁体中文（OpenCC标准）=>繁体中文（台湾）单字转换字典
             /// </summary>
-            public static Dictionary<string, string> TWVariants;
+            public static IDictionary<string, string> TWVariants { get; set; }
 
             /// <summary>
             /// 繁体中文（OpenCC标准）=>繁体中文（台湾）词汇转换字典
             /// </summary>
-            public static Dictionary<string, string> TWPhrases;
+            public static IDictionary<string, string> TWPhrases { get; set; }
 
             /// <summary>
             /// 繁体中文（台湾）=>繁体中文（OpenCC标准）单字转换字典
             /// </summary>
-            public static Dictionary<string, string> TWVariantsReversed;
+            public static IDictionary<string, string> TWVariantsRev { get; set; }
+
+            /// <summary>
+            /// 繁体中文（台湾）=>繁体中文（OpenCC标准）异体字词汇转换字典
+            /// </summary>
+            public static IDictionary<string, string> TWVariantsRevPhrases { get; set; }
 
             /// <summary>
             /// 繁体中文（台湾）=>繁体中文（OpenCC标准）词汇转换字典
             /// </summary>
-            public static Dictionary<string, string> TWPhrasesReversed;
+            public static IDictionary<string, string> TWPhrasesRev { get; set; }
 
             /// <summary>
             /// 繁体中文（OpenCC标准）=>繁体中文（香港）单字转换字典
             /// </summary>
-            public static Dictionary<string, string> HKVariants;
+            public static IDictionary<string, string> HKVariants { get; set; }
 
             /// <summary>
             /// 繁体中文（香港）=>繁体中文（OpenCC标准）单字转换字典
             /// </summary>
-            public static Dictionary<string, string> HKVariantsReversed;
+            public static IDictionary<string, string> HKVariantsRev { get; set; }
 
             /// <summary>
-            /// 繁体中文（OpenCC标准）=>繁体中文（中国大陆）单字转换字典
+            /// 繁体中文（香港）=>繁体中文（OpenCC标准）异体字词汇转换字典
             /// </summary>
-            public static Dictionary<string, string> CNVariants;
+            public static IDictionary<string, string> HKVariantsRevPhrases { get; set; }
 
             /// <summary>
-            /// 繁体中文（中国大陆）=>繁体中文（OpenCC标准）单字转换字典
+            /// 日语（旧字体）=>日语（新字体）单字转换字典
             /// </summary>
-            public static Dictionary<string, string> CNVariantsReversed;
+            public static IDictionary<string, string> JPVariants { get; set; }
+
+            /// <summary>
+            /// 日语（新字体）=>日语（旧字体）单字转换字典
+            /// </summary>
+            public static IDictionary<string, string> JPVariantsRev { get; set; }
+
+            /// <summary>
+            /// 日语（新字体）=>日语（旧字体）异体字单字转换字典
+            /// </summary>
+            public static IDictionary<string, string> JPShinjitaiCharacters { get; set; }
+
+            /// <summary>
+            /// 日语（新字体）=>日语（旧字体）异体字词汇转换字典
+            /// </summary>
+            public static IDictionary<string, string> JPShinjitaiPhrases { get; set; }
+
 
             /// <summary>
             /// 加载所有字典文件
@@ -88,34 +109,16 @@ namespace OpenCCNET
                 TSPhrases = LoadDictionary(@"TSPhrases");
                 TWVariants = LoadDictionary(@"TWVariants");
                 TWPhrases = LoadDictionary(new[] { @"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther" });
-                TWVariantsReversed = LoadDictionary(@"TWVariants", true);
-                TWPhrasesReversed = LoadDictionary(new[] { @"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther" }, true);
+                TWVariantsRev = LoadDictionary(@"TWVariants", true);
+                TWVariantsRevPhrases = LoadDictionary(@"TWVariantsRevPhrases");
+                TWPhrasesRev = LoadDictionary(new[] { @"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther" }, true);
                 HKVariants = LoadDictionary(@"HKVariants");
-                HKVariantsReversed = LoadDictionary(@"HKVariants", true);
-                CNVariants = LoadDictionary(@"CNVariants");
-                CNVariantsReversed = LoadDictionary(@"CNVariants", true);
-            }
-
-            /// <summary>
-            /// 异步加载所有字典文件
-            /// </summary>
-            /// <param name="dictionaryDirectory"></param>
-            public static async Task InitializeAsync(string dictionaryDirectory = "Dictionary")
-            {
-                _dictionaryDirectory = dictionaryDirectory;
-                STCharacters = await LoadDictionaryAsync(@"STCharacters");
-                STPhrases = await LoadDictionaryAsync(@"STPhrases");
-                TSCharacters = await LoadDictionaryAsync(@"TSCharacters");
-                TSPhrases = await LoadDictionaryAsync(@"TSPhrases");
-                TWVariants = await LoadDictionaryAsync(@"TWVariants");
-                TWPhrases = await LoadDictionaryAsync(new[] { @"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther" });
-                TWVariantsReversed = await LoadDictionaryAsync(@"TWVariants", true);
-                TWPhrasesReversed =
-                    await LoadDictionaryAsync(new[] { @"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther" }, true);
-                HKVariants = await LoadDictionaryAsync(@"HKVariants");
-                HKVariantsReversed = await LoadDictionaryAsync(@"HKVariants", true);
-                CNVariants = await LoadDictionaryAsync(@"CNVariants");
-                CNVariantsReversed = await LoadDictionaryAsync(@"CNVariants", true);
+                HKVariantsRev = LoadDictionary(@"HKVariants", true);
+                HKVariantsRevPhrases = LoadDictionary(@"HKVariantsRevPhrases");
+                JPVariants = LoadDictionary(@"JPVariants");
+                JPVariantsRev = LoadDictionary(@"JPVariants", true);
+                JPShinjitaiCharacters = LoadDictionary(@"JPShinjitaiCharacters");
+                JPShinjitaiPhrases = LoadDictionary(@"JPShinjitaiPhrases");
             }
 
             /// <summary>
@@ -123,7 +126,7 @@ namespace OpenCCNET
             /// </summary>
             /// <param name="dictionaryName">字典名称</param>
             /// <param name="reverse">是否反转</param>
-            private static Dictionary<string, string> LoadDictionary(string dictionaryName, bool reverse = false)
+            private static IDictionary<string, string> LoadDictionary(string dictionaryName, bool reverse = false)
             {
                 var dictionaryPath = Path.Combine(_dictionaryDirectory, $"{dictionaryName}.txt");
                 var dictionary = new Dictionary<string, string>();
@@ -153,46 +156,11 @@ namespace OpenCCNET
             }
 
             /// <summary>
-            /// 异步加载单个字典文件
-            /// </summary>
-            /// <param name="dictionaryName">字典名称</param>
-            /// <param name="reverse">是否反转</param>
-            private static async Task<Dictionary<string, string>> LoadDictionaryAsync(string dictionaryName,
-                bool reverse = false)
-            {
-                var dictionaryPath = Path.Combine(_dictionaryDirectory, $"{dictionaryName}.txt");
-                var dictionary = new Dictionary<string, string>();
-                using (var sr = new StreamReader(dictionaryPath))
-                {
-                    string line;
-                    while ((line = await sr.ReadLineAsync()) != null)
-                    {
-                        var items = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                        if (!reverse)
-                        {
-                            if (dictionary.ContainsKey(items[0])) continue;
-                            dictionary.Add(items[0], items[1]);
-                        }
-                        else
-                        {
-                            for (var i = 1; i < items.Length; i++)
-                            {
-                                if (dictionary.ContainsKey(items[i])) continue;
-                                dictionary.Add(items[i], items[0]);
-                            }
-                        }
-                    }
-                }
-
-                return dictionary;
-            }
-
-            /// <summary>
             /// 加载多个字典文件且合并
             /// </summary>
             /// <param name="dictionaryNames">字典名称</param>
             /// <param name="reverse">是否反转</param>
-            private static Dictionary<string, string> LoadDictionary(IEnumerable<string> dictionaryNames,
+            private static IDictionary<string, string> LoadDictionary(IEnumerable<string> dictionaryNames,
                 bool reverse = false)
             {
                 var dictionaryPaths = dictionaryNames.Select(name => Path.Combine(_dictionaryDirectory, $"{name}.txt"))
@@ -204,45 +172,6 @@ namespace OpenCCNET
                     {
                         string line;
                         while ((line = sr.ReadLine()) != null)
-                        {
-                            var items = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                            if (!reverse)
-                            {
-                                if (dictionary.ContainsKey(items[0])) continue;
-                                dictionary.Add(items[0], items[1]);
-                            }
-                            else
-                            {
-                                for (var i = 1; i < items.Length; i++)
-                                {
-                                    if (dictionary.ContainsKey(items[i])) continue;
-                                    dictionary.Add(items[i], items[0]);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return dictionary;
-            }
-
-            /// <summary>
-            /// 异步加载多个字典文件且合并
-            /// </summary>
-            /// <param name="dictionaryNames">字典名称</param>
-            /// <param name="reverse">是否反转</param>
-            private static async Task<Dictionary<string, string>> LoadDictionaryAsync(
-                IEnumerable<string> dictionaryNames, bool reverse = false)
-            {
-                var dictionaryPaths = dictionaryNames.Select(name => Path.Combine(_dictionaryDirectory, $"{name}.txt"))
-                    .ToList();
-                var dictionary = new Dictionary<string, string>();
-                foreach (var path in dictionaryPaths)
-                {
-                    using (var sr = new StreamReader(path))
-                    {
-                        string line;
-                        while ((line = await sr.ReadLineAsync()) != null)
                         {
                             var items = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
                             if (!reverse)

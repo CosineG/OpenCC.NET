@@ -5,11 +5,12 @@
 		<Authors>CosineG</Authors>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Title>OpenCC.NET</Title>
-		<Version>0.3.0</Version>
+		<Version>1.0.0</Version>
 		<PackageProjectUrl>https://github.com/CosineG/OpenCC.NET</PackageProjectUrl>
 		<Description>The .Net version of OpenCC(Open Chinese Convert), for the conversion between Simplified Chinese and Traditional Chinese.</Description>
 		<PackageId>OpenCCNET</PackageId>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	</PropertyGroup>
 
@@ -34,18 +35,20 @@
 
 	<ItemGroup>
 		<PackageReference Include="jieba.NET" Version="0.42.2" />
-		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="LICENSE">
 			<Pack>True</Pack>
-			<PackagePath></PackagePath>
+			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="xcopy /e /y /i &quot;$(SolutionDir)Dictionary&quot; &quot;$(ProjectDir)$(OutDir)Dictionary&quot;&#xD;&#xA;xcopy /e /y /i &quot;$(SolutionDir)JiebaResource&quot; &quot;$(ProjectDir)$(OutDir)JiebaResource&quot;" />
-	</Target>
+	<ItemGroup>
+		<None Include="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 </Project>
