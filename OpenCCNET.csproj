@@ -5,7 +5,7 @@
 		<Authors>CosineG</Authors>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Title>OpenCC.NET</Title>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<PackageProjectUrl>https://github.com/CosineG/OpenCC.NET</PackageProjectUrl>
 		<Description>The .Net version of OpenCC(Open Chinese Convert), for the conversion between Simplified Chinese and Traditional Chinese.</Description>
 		<PackageId>OpenCCNET</PackageId>
@@ -14,27 +14,15 @@
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	</PropertyGroup>
 
-
 	<ItemGroup>
 		<Content Include="Dictionary\*.txt">
-			<Pack>true</Pack>
-			<PackagePath>Dictionary\</PackagePath>
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-			<PackageCopyToOutput>true</PackageCopyToOutput>
+			<Pack>True</Pack>
+			<PackageCopyToOutput>True</PackageCopyToOutput>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
 		<Content Include="JiebaResource\*.*">
-			<Pack>true</Pack>
-			<PackagePath>JiebaResource\</PackagePath>
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-			<PackageCopyToOutput>true</PackageCopyToOutput>
+			<Pack>True</Pack>
+			<PackageCopyToOutput>True</PackageCopyToOutput>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="jieba.NET" Version="0.42.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -42,13 +30,14 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Include="readme.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="jieba.NET" Version="0.42.2" />
 	</ItemGroup>
 
 </Project>
