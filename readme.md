@@ -1,5 +1,12 @@
 # OpenCC.NET
 
+[![GitHub license](https://img.shields.io/github/license/CosineG/OpenCC.NET)](https://github.com/CosineG/OpenCC.NET/blob/master/LICENSE) 
+[![Nuget](https://img.shields.io/nuget/v/OpenCCNET)](https://www.nuget.org/packages/OpenCCNET/) 
+[![Nuget](https://img.shields.io/nuget/dt/OpenCCNET?label=nuget-downloads)](https://www.nuget.org/packages/OpenCCNET/) 
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/CosineG/OpenCC.NET/publish%20to%20nuget)](https://github.com/CosineG/OpenCC.NET/actions/workflows/nuget.yml)
+
+简体中文 | [English](readme-en.md)
+
 ## 介绍
 
 OpenCC.NET是OpenCC(Open Chinese Convert, 开放中文转换)的C#非官方版本，支持中文简繁体之间词汇级别的转换，同时还支持地域间异体字以及词汇的转换。
@@ -7,11 +14,11 @@ OpenCC.NET是OpenCC(Open Chinese Convert, 开放中文转换)的C#非官方版�
 ### 特点
 
 - 严格区分「一简对多繁」和「一简对多异」
-- 完全兼容异体字，可以实现动态替换
+- 完全兼容异体字
 - 严格审校一简对多繁词条，原则为「能分则不合」
 - 支持港/台异体字转换，以及大陆/台湾常用词汇转换
-- 完全兼容OpenCC原生词库，且词库和函数库完全分离，可以自由修改、导入、扩展
-- 基于.Net Standard 2.0，同时支持.NET Framework 4.6.1和.NET Core 2.0及以上版本
+- 完全兼容OpenCC原生词库，可以自由修改、导入、扩展
+- 基于.NET Standard 2.0，同时支持.NET Framework 4.6.1和.NET Core 2.0及以上版本
 
 #### 更新
 
@@ -19,7 +26,7 @@ OpenCC.NET是OpenCC(Open Chinese Convert, 开放中文转换)的C#非官方版�
 
  - 重构和简化了项目结构和处理逻辑，改为和OpenCC类似的链式处理
  - 修复了繁中（台）转简中会出现「著作」=>「着作」的Bug
- - 现在项目引入OpenCC.NET包后，能够自动将打包的字典和资源文件复制到程序输出目录
+ - 现在项目引入OpenCCNET包后，能够自动将打包的字典和资源文件复制到程序输出目录
  - 添加了日语汉字新旧字体转换的功能
 
 ## 开始
@@ -82,8 +89,8 @@ Console.WriteLine(ZhConverter.ShinToKyuu("沖縄県内の学校"));
 |ToHantFromTW(bool=false)|繁体中文（台湾）=>繁体中文（OpenCC标准）|bool参数决定是否转换为大陆地区常用词汇|
 |ToHansFromHK()|繁体中文（香港）=>简体中文||
 |ToHantFromHK()|繁体中文（香港）=>繁体中文（OpenCC标准）||
-|ToShinFromKyuu(string)|日语（旧字体）=>日语（新字体）||
-|ToKyuuFromShin(string)|日语（新字体）=>日语（旧字体）||
+|ToShinFromKyuu()|日语（旧字体）=>日语（新字体）||
+|ToKyuuFromShin()|日语（新字体）=>日语（旧字体）||
 
 ```csharp
 var input = "為我的電腦換了新的記憶體，開啟電腦後感覺看網路影片更加流暢了";
@@ -126,9 +133,9 @@ ZhConverter.ZhSegment.Segment = input =>
 
 ### OpenCC
 
-[OpenCC](https://github.com/BYVoid/OpenCC)提供词库。
+[BYVoid/OpenCC](https://github.com/BYVoid/OpenCC) 提供词库。
 
 ### jieba.NET
 
-[jieba.NET](https://github.com/anderscui/jieba.NET)提供分词。
+[anderscui/jieba.NET](https://github.com/anderscui/jieba.NET) 提供分词功能。
 

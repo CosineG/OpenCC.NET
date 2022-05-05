@@ -108,60 +108,24 @@ namespace OpenCCNET
                 TSCharacters = LoadDictionary(@"TSCharacters");
                 TSPhrases = LoadDictionary(@"TSPhrases");
                 TWVariants = LoadDictionary(@"TWVariants");
-                TWPhrases = LoadDictionary(new[] { @"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther" });
-                TWVariantsRev = LoadDictionary(@"TWVariants", true);
+                TWPhrases = LoadDictionary(@"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther");
+                TWVariantsRev = LoadDictionaryReversed(@"TWVariants");
                 TWVariantsRevPhrases = LoadDictionary(@"TWVariantsRevPhrases");
-                TWPhrasesRev = LoadDictionary(new[] { @"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther" }, true);
+                TWPhrasesRev = LoadDictionaryReversed(@"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther");
                 HKVariants = LoadDictionary(@"HKVariants");
-                HKVariantsRev = LoadDictionary(@"HKVariants", true);
+                HKVariantsRev = LoadDictionaryReversed(@"HKVariants");
                 HKVariantsRevPhrases = LoadDictionary(@"HKVariantsRevPhrases");
                 JPVariants = LoadDictionary(@"JPVariants");
-                JPVariantsRev = LoadDictionary(@"JPVariants", true);
+                JPVariantsRev = LoadDictionaryReversed(@"JPVariants");
                 JPShinjitaiCharacters = LoadDictionary(@"JPShinjitaiCharacters");
                 JPShinjitaiPhrases = LoadDictionary(@"JPShinjitaiPhrases");
             }
 
             /// <summary>
-            /// 加载单个字典文件
-            /// </summary>
-            /// <param name="dictionaryName">字典名称</param>
-            /// <param name="reverse">是否反转</param>
-            private static IDictionary<string, string> LoadDictionary(string dictionaryName, bool reverse = false)
-            {
-                var dictionaryPath = Path.Combine(_dictionaryDirectory, $"{dictionaryName}.txt");
-                var dictionary = new Dictionary<string, string>();
-                using (var sr = new StreamReader(dictionaryPath))
-                {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        var items = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                        if (!reverse)
-                        {
-                            if (dictionary.ContainsKey(items[0])) continue;
-                            dictionary.Add(items[0], items[1]);
-                        }
-                        else
-                        {
-                            for (var i = 1; i < items.Length; i++)
-                            {
-                                if (dictionary.ContainsKey(items[i])) continue;
-                                dictionary.Add(items[i], items[0]);
-                            }
-                        }
-                    }
-                }
-
-                return dictionary;
-            }
-
-            /// <summary>
-            /// 加载多个字典文件且合并
+            /// 加载字典文件
             /// </summary>
             /// <param name="dictionaryNames">字典名称</param>
-            /// <param name="reverse">是否反转</param>
-            private static IDictionary<string, string> LoadDictionary(IEnumerable<string> dictionaryNames,
-                bool reverse = false)
+            private static IDictionary<string, string> LoadDictionary(params string[] dictionaryNames)
             {
                 var dictionaryPaths = dictionaryNames.Select(name => Path.Combine(_dictionaryDirectory, $"{name}.txt"))
                     .ToList();
@@ -174,18 +138,33 @@ namespace OpenCCNET
                         while ((line = sr.ReadLine()) != null)
                         {
                             var items = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                            if (!reverse)
+                            dictionary[items[0]] = items[1];
+                        }
+                    }
+                }
+
+                return dictionary;
+            }
+
+            /// <summary>
+            /// 反向加载字典文件
+            /// </summary>
+            /// <param name="dictionaryNames">字典名称</param>
+            private static IDictionary<string, string> LoadDictionaryReversed(params string[] dictionaryNames)
+            {
+                var dictionaryPaths = dictionaryNames.Select(name => Path.Combine(_dictionaryDirectory, $"{name}.txt"));
+                var dictionary = new Dictionary<string, string>();
+                foreach (var path in dictionaryPaths)
+                {
+                    using (var sr = new StreamReader(path))
+                    {
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            var items = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+                            for (var i = 1; i < items.Length; i++)
                             {
-                                if (dictionary.ContainsKey(items[0])) continue;
-                                dictionary.Add(items[0], items[1]);
-                            }
-                            else
-                            {
-                                for (var i = 1; i < items.Length; i++)
-                                {
-                                    if (dictionary.ContainsKey(items[i])) continue;
-                                    dictionary.Add(items[i], items[0]);
-                                }
+                                dictionary[items[i]] = items[0];
                             }
                         }
                     }
