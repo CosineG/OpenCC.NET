@@ -127,23 +127,10 @@ namespace OpenCCNET
             /// <param name="dictionaryNames">字典名称</param>
             private static IDictionary<string, string> LoadDictionary(params string[] dictionaryNames)
             {
-                var dictionaryPaths = dictionaryNames.Select(name => Path.Combine(_dictionaryDirectory, $"{name}.txt"))
-                    .ToList();
-                var dictionary = new Dictionary<string, string>();
-                foreach (var path in dictionaryPaths)
+                return LoadDictionaryInternal(dictionaryNames, (items, dictionary) =>
                 {
-                    using (var sr = new StreamReader(path))
-                    {
-                        string line;
-                        while ((line = sr.ReadLine()) != null)
-                        {
-                            var items = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                            dictionary[items[0]] = items[1];
-                        }
-                    }
-                }
-
-                return dictionary;
+                    dictionary[items[0]] = items[1];
+                });
             }
 
             /// <summary>
@@ -152,21 +139,51 @@ namespace OpenCCNET
             /// <param name="dictionaryNames">字典名称</param>
             private static IDictionary<string, string> LoadDictionaryReversed(params string[] dictionaryNames)
             {
+                return LoadDictionaryInternal(dictionaryNames, (items, dictionary) =>
+                {
+                    for (var i = 1; i < items.Count; i++)
+                    {
+                        dictionary[items[i]] = items[0];
+                    }
+                });
+            }
+
+            /// <summary>
+            /// 内部字典加载方法
+            /// </summary>
+            private static IDictionary<string, string> LoadDictionaryInternal(IList<string> dictionaryNames, Action<IList<string>, Dictionary<string, string>> processLine)
+            {
+                if (string.IsNullOrEmpty(_dictionaryDirectory))
+                {
+                    throw new InvalidOperationException("字典目录未初始化，请先调用Initialize方法");
+                }
+
+                var dictionary = new Dictionary<string, string>(10000); // 预分配合理的初始容量
                 var dictionaryPaths = dictionaryNames.Select(name => Path.Combine(_dictionaryDirectory, $"{name}.txt"));
-                var dictionary = new Dictionary<string, string>();
+
                 foreach (var path in dictionaryPaths)
                 {
-                    using (var sr = new StreamReader(path))
+                    if (!File.Exists(path))
                     {
-                        string line;
-                        while ((line = sr.ReadLine()) != null)
+                        throw new FileNotFoundException($"找不到字典文件：{path}");
+                    }
+
+                    try
+                    {
+                        var lines = File.ReadAllLines(path);
+                        foreach (var line in lines)
                         {
+                            if (string.IsNullOrWhiteSpace(line)) continue;
+                            
                             var items = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                            for (var i = 1; i < items.Length; i++)
-                            {
-                                dictionary[items[i]] = items[0];
-                            }
+                            if (items.Length < 2) continue;
+
+                            processLine(items, dictionary);
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IOException($"加载字典文件 {path} 时发生错误", ex);
                     }
                 }
 
