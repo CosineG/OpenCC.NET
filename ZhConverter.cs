@@ -8,39 +8,24 @@ namespace OpenCCNET
 {
     public static partial class ZhConverter
     {
-        private static int _parallelThreshold = 1000;
-
         /// <summary>
-        /// 获取或设置启用并行处理的词组数量阈值
+        /// 是否启用并行处理
         /// </summary>
-        /// <exception cref="ArgumentException">当设置的值小于1时抛出</exception>
-        public static int ParallelThreshold
-        {
-            get => _parallelThreshold;
-            set
-            {
-                if (value < 1)
-                {
-                    throw new ArgumentException("阈值必须大于0", nameof(value));
-                }
-                _parallelThreshold = value;
-            }
-        }
+        public static bool IsParallelEnabled { get; set; } = false;
 
         /// <summary>
         /// 初始化
         /// </summary>
         /// <param name="dictionaryDirectory">字典文件夹路径</param>
         /// <param name="jiebaResourceDirectory">Jieba.NET资源路径</param>
-        /// <param name="parallelThreshold">启用并行处理的词组数量阈值，默认为1000</param>
-        /// <exception cref="ArgumentException">当parallelThreshold小于1时抛出</exception>
+        /// <param name="isParallelEnabled">是否启用并行处理。默认为 false</param>
         public static void Initialize(string dictionaryDirectory = "Dictionary",
             string jiebaResourceDirectory = "JiebaResource",
-            int parallelThreshold = 1000)
+            bool isParallelEnabled = false)
         {
             ZhSegment.Initialize(jiebaResourceDirectory);
             ZhDictionary.Initialize(dictionaryDirectory);
-            ParallelThreshold = parallelThreshold;
+            IsParallelEnabled = isParallelEnabled;
         }
 
         #region 简体中文
@@ -320,8 +305,8 @@ namespace OpenCCNET
 
             var phrasesList = phrases is IList<string> tempList ? tempList : phrases.ToList();
 
-            // 根据阈值决定是否启用并行处理
-            if (phrasesList.Count > _parallelThreshold)
+            // 是否使用并行处理
+            if (IsParallelEnabled)
             {
                 return phrasesList.AsParallel()
                     .AsOrdered()
