@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCCNET", "OpenCCNET.csproj", "{6F08C262-36AA-46D2-94DC-110E11DB8BE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCCNET.Test", ".\Test\OpenCCNET.Test.csproj", "{8C75A223-E253-4CEE-ABB6-3D9F25E7D96C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6F08C262-36AA-46D2-94DC-110E11DB8BE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F08C262-36AA-46D2-94DC-110E11DB8BE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F08C262-36AA-46D2-94DC-110E11DB8BE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C75A223-E253-4CEE-ABB6-3D9F25E7D96C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C75A223-E253-4CEE-ABB6-3D9F25E7D96C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C75A223-E253-4CEE-ABB6-3D9F25E7D96C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C75A223-E253-4CEE-ABB6-3D9F25E7D96C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

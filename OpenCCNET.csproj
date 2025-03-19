@@ -19,11 +19,19 @@
 		<Content Include="Dictionary\*.txt">
 			<Pack>True</Pack>
 			<PackageCopyToOutput>True</PackageCopyToOutput>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="JiebaResource\*.*">
 			<Pack>True</Pack>
 			<PackageCopyToOutput>True</PackageCopyToOutput>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Test\**" />
+	  <EmbeddedResource Remove="Test\**" />
+	  <None Remove="Test\**" />
 	</ItemGroup>
 
 	<ItemGroup>
