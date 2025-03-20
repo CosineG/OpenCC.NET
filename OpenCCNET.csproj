@@ -5,24 +5,33 @@
 		<Authors>CosineG</Authors>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Title>OpenCC.NET</Title>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<PackageProjectUrl>https://github.com/CosineG/OpenCC.NET</PackageProjectUrl>
 		<Description>The .Net version of OpenCC(Open Chinese Convert), for the conversion between Simplified Chinese and Traditional Chinese.</Description>
 		<PackageId>OpenCCNET</PackageId>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<Content Include="Dictionary\*.txt">
 			<Pack>True</Pack>
 			<PackageCopyToOutput>True</PackageCopyToOutput>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="JiebaResource\*.*">
 			<Pack>True</Pack>
 			<PackageCopyToOutput>True</PackageCopyToOutput>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Test\**" />
+	  <EmbeddedResource Remove="Test\**" />
+	  <None Remove="Test\**" />
 	</ItemGroup>
 
 	<ItemGroup>

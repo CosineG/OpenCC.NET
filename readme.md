@@ -52,7 +52,7 @@ OpenCC.NET提供了两种风格的API：
 |TWToHans(string, bool=false)|繁体中文（台湾）=>简体中文|bool参数决定是否转换为大陆地区常用词汇|
 |TWToHant(string, bool=false)|繁体中文（台湾）=>繁体中文（OpenCC标准）|bool参数决定是否转换为大陆地区常用词汇|
 |HKToHans(string)|繁体中文（香港）=>简体中文||
-|HKToHant(string, bool=false)|繁体中文（香港）=>繁体中文（OpenCC标准）||
+|HKToHant(string)|繁体中文（香港）=>繁体中文（OpenCC标准）||
 |KyuuToShin(string)|日语（旧字体）=>日语（新字体）||
 |ShinToKyuu(string)|日语（新字体）=>日语（旧字体）||
 
