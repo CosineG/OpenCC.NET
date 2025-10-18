@@ -10,7 +10,7 @@
 
 ## 介绍
 
-OpenCC.NET是OpenCC(Open Chinese Convert, 开放中文转换)的C#非官方版本，支持中文简繁体之间词汇级别的转换，同时还支持地域间异体字以及词汇的转换。
+OpenCC.NET 是 OpenCC (Open Chinese Convert, 开放中文转换) 的 C# 非官方版本，支持中文简繁体之间词汇级别的转换，同时还支持地域间异体字以及词汇的转换。
 
 ### 特点
 
@@ -20,12 +20,12 @@ OpenCC.NET是OpenCC(Open Chinese Convert, 开放中文转换)的C#非官方版�
 - 支持港/台异体字转换，以及大陆/台湾常用词汇转换
 - 完全兼容OpenCC原生词库，可以自由修改、导入、扩展
 - 支持自定义分词逻辑
-- 基于.NET Standard 2.0，同时支持.NET Framework 4.6.1和.NET Core 2.0及以上版本
+- 基于 .NET Standard 2.0，同时支持 .NET Framework 4.6.1 和 .NET Core 2.0 及以上版本
 
 ## 开始
 
 ### 获取
-Nuget搜索OpenCCNET并安装，在项目代码中引入命名空间OpenCCNET。Nuget包中自带Dictionary（字典文件）和JiebaResource（Jieba.NET运行所需的词典及其它数据文件），默认会复制到程序输出目录。
+Nuget 搜索 OpenCCNET 并安装，在项目代码中引入命名空间 OpenCCNET。Nuget 包中自带 Dictionary（字典文件）和 JiebaResource（Jieba.NET运行所需的词典及其它数据文件），默认会复制到程序输出目录。
 
 ### 使用
 在使用前请调用`ZhConverter.Initialize()`，含四个默认参数：
@@ -42,7 +42,7 @@ ZhConverter.Initialize();
 ZhConverter.Initialize(segmentMode: SegmentMode.MaxMatch);
 ```
 
-OpenCC.NET提供了两种风格的API：
+OpenCC.NET 提供了两种风格的API：
 
 #### ZhConverter静态类
 

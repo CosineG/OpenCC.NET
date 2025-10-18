@@ -22,15 +22,6 @@ OpenCC.NET is the unofficial C# version of OpenCC (Open Chinese Convert), which 
 - Support custom segmentation logic.
 - Based on .NET Standard 2.0, supporting .NET Framework 4.6.1 and .NET Core 2.0 and above.
 
-#### Update
-
-Updated for 1.0 release:
-
- - Refactored and simplified the project structure and processing logic to a chain-like process similar to OpenCC.
- - Fixed the bug that 「著作」=>「着作」 in the conversion of Traditional Chinese (Taiwan) to Simplified Chinese.
- - Now when OpenCCNET package is introduced into the project, the packaged dictionaries and resource files can be copied to the program output directory automatically.
- - Added the function of converting Kyūjitai and Shinjitai to Japanese kanji.
-
 ## Start
 
 ### Installation
