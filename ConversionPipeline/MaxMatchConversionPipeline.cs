@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZhDictionary = OpenCCNET.ZhConverter.ZhDictionary;
 
 namespace OpenCCNET.ConversionPipeline
 {
@@ -10,7 +11,7 @@ namespace OpenCCNET.ConversionPipeline
     /// </summary>
     public class MaxMatchConversionPipeline : IConversionPipeline
     {
-        private const int MaxWordLength = 20; // 最大词长限制
+        private static readonly int MaxWordLength = ZhDictionary.MaxWordLength;
         private string _text;
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace OpenCCNET.ConversionPipeline
         /// <param name="text">输入文本</param>
         /// <param name="dictionaries">转换字典集合</param>
         /// <returns>转换后的文本</returns>
-        private string MaxMatchConvert(string text, params IDictionary<string, string>[] dictionaries)
+        private static string MaxMatchConvert(string text, params IDictionary<string, string>[] dictionaries)
         {
             if (string.IsNullOrEmpty(text))
             {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace OpenCCNET
 {
@@ -94,6 +95,23 @@ namespace OpenCCNET
             /// </summary>
             public static IDictionary<string, string> JPShinjitaiPhrases { get; set; }
 
+            /// <summary>
+            /// 缓存了 <see cref="ZhDictionary"/> 类中所有公共静态的 <see cref="IDictionary{TKey, TValue}"/> 属性的元数据
+            /// </summary>
+            private static readonly PropertyInfo[] WordDictionaryProperties = typeof(ZhDictionary)
+                .GetProperties(BindingFlags.Public | BindingFlags.Static)
+                .Where(p => p.PropertyType == typeof(IDictionary<string, string>))
+                .ToArray();
+
+            /// <summary>
+            /// 所有字典中词的最大长度
+            /// </summary>
+            internal static int MaxWordLength => WordDictionaryProperties
+                .Select(p => p.GetValue(null) as IDictionary<string, string>)
+                .Where(d => d is { Count: > 0 })
+                .SelectMany(d => d.Keys)
+                .DefaultIfEmpty(string.Empty)
+                .Max(k => k.Length);
 
             /// <summary>
             /// 加载所有字典文件
@@ -102,22 +120,22 @@ namespace OpenCCNET
             public static void Initialize(string dictionaryDirectory = "Dictionary")
             {
                 _dictionaryDirectory = dictionaryDirectory;
-                STCharacters = LoadDictionary(@"STCharacters");
-                STPhrases = LoadDictionary(@"STPhrases");
-                TSCharacters = LoadDictionary(@"TSCharacters");
-                TSPhrases = LoadDictionary(@"TSPhrases");
-                TWVariants = LoadDictionary(@"TWVariants");
-                TWPhrases = LoadDictionary(@"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther");
-                TWVariantsRev = LoadDictionaryReversed(@"TWVariants");
-                TWVariantsRevPhrases = LoadDictionary(@"TWVariantsRevPhrases");
-                TWPhrasesRev = LoadDictionaryReversed(@"TWPhrasesIT", @"TWPhrasesName", @"TWPhrasesOther");
-                HKVariants = LoadDictionary(@"HKVariants");
-                HKVariantsRev = LoadDictionaryReversed(@"HKVariants");
-                HKVariantsRevPhrases = LoadDictionary(@"HKVariantsRevPhrases");
-                JPVariants = LoadDictionary(@"JPVariants");
-                JPVariantsRev = LoadDictionaryReversed(@"JPVariants");
-                JPShinjitaiCharacters = LoadDictionary(@"JPShinjitaiCharacters");
-                JPShinjitaiPhrases = LoadDictionary(@"JPShinjitaiPhrases");
+                STCharacters = LoadDictionary("STCharacters");
+                STPhrases = LoadDictionary("STPhrases");
+                TSCharacters = LoadDictionary("TSCharacters");
+                TSPhrases = LoadDictionary("TSPhrases");
+                TWVariants = LoadDictionary("TWVariants");
+                TWPhrases = LoadDictionary("TWPhrasesIT", "TWPhrasesName", "TWPhrasesOther");
+                TWVariantsRev = LoadDictionaryReversed("TWVariants");
+                TWVariantsRevPhrases = LoadDictionary("TWVariantsRevPhrases");
+                TWPhrasesRev = LoadDictionaryReversed("TWPhrasesIT", "TWPhrasesName", "TWPhrasesOther");
+                HKVariants = LoadDictionary("HKVariants");
+                HKVariantsRev = LoadDictionaryReversed("HKVariants");
+                HKVariantsRevPhrases = LoadDictionary("HKVariantsRevPhrases");
+                JPVariants = LoadDictionary("JPVariants");
+                JPVariantsRev = LoadDictionaryReversed("JPVariants");
+                JPShinjitaiCharacters = LoadDictionary("JPShinjitaiCharacters");
+                JPShinjitaiPhrases = LoadDictionary("JPShinjitaiPhrases");
             }
 
             /// <summary>

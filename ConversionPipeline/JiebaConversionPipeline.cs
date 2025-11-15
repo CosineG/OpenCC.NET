@@ -41,7 +41,7 @@ namespace OpenCCNET.ConversionPipeline
                 return this;
             }
 
-            var phrasesList = _phrases is IList<string> tempList ? tempList : _phrases.ToList();
+            var phrasesList = _phrases as IList<string> ?? _phrases.ToList();
 
             List<string> result;
             if (ZhConverter.IsParallelEnabled)
