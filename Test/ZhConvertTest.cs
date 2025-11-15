@@ -1,12 +1,8 @@
 namespace OpenCCNET.Test
 {
-    public class ZhConvertTest
+    #region 测试基类
+    public abstract class ZhConvertTestBase
     {
-        public ZhConvertTest()
-        {
-            ZhConverter.Initialize();
-        }
-
         private const string TextHans = """
             在这个信息发达的时代，每家每户的人们都对于个人形象愈发重视。
             无论是发型、穿搭，还是言行举止，都可能影响社交场合的表现。
@@ -131,4 +127,41 @@ namespace OpenCCNET.Test
             Assert.Equal(TextHant, TextHk.ToHantFromHK());
         }
     }
+    #endregion
+
+    #region Fixtures
+    public class MaxMatchFixture
+    {
+        public MaxMatchFixture()
+        {
+            ZhConverter.Initialize(segmentMode: SegmentMode.MaxMatch);
+        }
+    }
+
+    public class JiebaFixture
+    {
+        public JiebaFixture()
+        {
+            ZhConverter.Initialize(segmentMode: SegmentMode.Jieba);
+        }
+    }
+    #endregion
+
+    #region 不同分词模式测试
+    [Collection("NonParallelTestCollection")]
+    public class ZhConvertTest_MaxMatch : ZhConvertTestBase, IClassFixture<MaxMatchFixture>
+    {
+        public ZhConvertTest_MaxMatch(MaxMatchFixture fixture)
+        {
+        }
+    }
+
+    [Collection("NonParallelTestCollection")]
+    public class ZhConvertTest_Jieba : ZhConvertTestBase, IClassFixture<JiebaFixture>
+    {
+        public ZhConvertTest_Jieba(JiebaFixture fixture)
+        {
+        }
+    }
+    #endregion
 }

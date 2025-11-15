@@ -3,7 +3,8 @@
 [![GitHub license](https://img.shields.io/github/license/CosineG/OpenCC.NET)](https://github.com/CosineG/OpenCC.NET/blob/master/LICENSE) 
 [![Nuget](https://img.shields.io/nuget/v/OpenCCNET)](https://www.nuget.org/packages/OpenCCNET/) 
 [![Nuget](https://img.shields.io/nuget/dt/OpenCCNET?label=nuget-downloads)](https://www.nuget.org/packages/OpenCCNET/) 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/CosineG/OpenCC.NET/publish%20to%20nuget)](https://github.com/CosineG/OpenCC.NET/actions/workflows/nuget.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/CosineG/OpenCC.NET/nuget.yml
+)](https://github.com/CosineG/OpenCC.NET/actions/workflows/nuget.yml)
 
 [简体中文](readme.md) | English
 
@@ -18,16 +19,8 @@ OpenCC.NET is the unofficial C# version of OpenCC (Open Chinese Convert), which 
 - Strictly review one simple word against many complicated words, the principle is "If it can be divided, it will be divided".
 - Support Hong Kong / Taiwan variants conversion, and China mainland / Taiwan regional idioms conversion.
 - It is fully compatible with OpenCC native dictionaries, and the dictionaries can be modified, imported and extended freely.
+- Support custom segmentation logic.
 - Based on .NET Standard 2.0, supporting .NET Framework 4.6.1 and .NET Core 2.0 and above.
-
-#### Update
-
-Updated for 1.0 release:
-
- - Refactored and simplified the project structure and processing logic to a chain-like process similar to OpenCC.
- - Fixed the bug that 「著作」=>「着作」 in the conversion of Traditional Chinese (Taiwan) to Simplified Chinese.
- - Now when OpenCCNET package is introduced into the project, the packaged dictionaries and resource files can be copied to the program output directory automatically.
- - Added the function of converting Kyūjitai and Shinjitai to Japanese kanji.
 
 ## Start
 
@@ -35,7 +28,19 @@ Updated for 1.0 release:
 Search for OpenCCNET in Nuget and install it, introduce the namespace OpenCCNET in the project. The package comes with Dictionary (dictionary files) and JiebaResource (resource files needed to run Jieba.NET), which will be copied to the program output directory by default.
 
 ### Usage
-Please call `ZhConverter.Initialize()`, which with 2 default parameters, the path of dictionaries and the Jieba.NET resources, before use. (the original `ZhUtil.Initialize()` is deprecated).
+Please call `ZhConverter.Initialize()` before use, which includes four default parameters:
+- `dictionaryDirectory`: Path to dictionary files (default is "Dictionary")
+- `jiebaResourceDirectory`: Path to Jieba.NET resources (default is "JiebaResource")
+- `isParallelEnabled`: Whether to enable parallel processing (default is false)
+- `segmentMode`: Segmentation mode (default is Jieba)
+
+```csharp
+// Default initialization (using Jieba segmentation)
+ZhConverter.Initialize();
+
+// Or specify segmentation mode (e.g., OpenCC's original maximum matching algorithm)
+ZhConverter.Initialize(segmentMode: SegmentMode.MaxMatch);
+```
 
 OpenCC.NET provides two styles of APIs:
 
@@ -110,7 +115,55 @@ Console.WriteLine("獨逸聯邦共和國".ToShinFromKyuu());
 
 ### Customization
 
-#### Segment
+#### Segmentation Modes
+
+OpenCC.NET supports three segmentation modes that can be flexibly switched according to your needs:
+
+##### 1. Jieba Mode (Default)
+
+Uses jieba.NET for Chinese word segmentation. The default Jieba.NET resource path is "JiebaResource", which can be customized.
+
+```csharp
+// Specify during initialization
+ZhConverter.Initialize(segmentMode: SegmentMode.Jieba);
+
+// Or switch at runtime
+ZhConverter.ZhSegment.SetMode(SegmentMode.Jieba);
+```
+
+##### 2. MaxMatch Mode
+
+Uses OpenCC's original maximum matching segmentation algorithm.
+
+```csharp
+// Specify during initialization
+ZhConverter.Initialize(segmentMode: SegmentMode.MaxMatch);
+
+// Or switch at runtime
+ZhConverter.ZhSegment.SetMode(SegmentMode.MaxMatch);
+```
+
+##### 3. Custom Mode
+
+Uses user-defined segmentation algorithm. The text is segmented once, and the results are reused throughout the conversion chain.
+
+```csharp
+// Method 1: Directly set the segmentation delegate (automatically switches to Custom mode) (for backward compatibility)
+ZhConverter.ZhSegment.Segment = input =>
+{
+    // Custom segmentation logic, e.g., split by spaces
+    return input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+};
+
+// Method 2: Use SetCustomSegment method
+ZhConverter.ZhSegment.SetCustomSegment(input =>
+{
+    // Custom segmentation logic, e.g., split by characters
+    return input.Select(c => c.ToString());
+});
+```
+
+#### Jieba Segmentation Customization
 
 By default, OpenCC.NET uses jieba.NET to implement segmentation, and the project uses a static JiebaSegmenter
 
@@ -119,17 +172,19 @@ public static JiebaSegmenter Jieba = new JiebaSegmenter();
 ```
 So it can be customized by `ZhConverter.ZhSegment.Jieba`, please see [jieba.NET](https://github.com/anderscui/jieba.NET) for details.
 
-OpenCC.NET also supports custom segment implementation:
+Call `ResetSegment()` to reuse the jieba.NET segmentation and reset the `JiebaSegmenter`.
+
+#### Parallel Processing
+
+For converting large amounts of text, you can enable parallel processing to improve performance:
 
 ```csharp
-ZhConverter.ZhSegment.Segment = input =>
-{
-    // input is string，and output is IEnumerable<string>
-    return new List<string>();
-};
-```
+// Enable during initialization
+ZhConverter.Initialize(isParallelEnabled: true);
 
-Call `ResetSegment()` to reuse the jieba.NET segmentation and reset the `JiebaSegmenter`.
+// Or set at runtime
+ZhConverter.IsParallelEnabled = true;
+```
 
 ## Acknowledgments
 
