@@ -30,9 +30,10 @@ namespace OpenCCNET
             }
 
             /// <summary>
-            /// jieba.NET分词器实例
+            /// AOTba分词器实例
+            /// 不进行实体（日期、时间等）保护（适用于OpenCC.NET调用）
             /// </summary>
-            public static JiebaSegmenter Jieba = new JiebaSegmenter();
+            public static JiebaSegmenter Jieba = new JiebaSegmenter(new JiebaConfig(EntityProtect.Disabled));
 
             /// <summary>
             /// 初始化分词器，加载必要的词典资源

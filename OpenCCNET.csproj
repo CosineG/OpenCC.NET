@@ -46,7 +46,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="jieba.NET" Version="0.42.2" />
+		<PackageReference Include="AOTba" Version="1.1.8" />
 	</ItemGroup>
 
 </Project>
